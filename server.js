@@ -17,11 +17,11 @@ var sendFile = function(response, filePath, fileContents) {
   response.writeHead(200, {
     'Content-Type': mime.lookup(path.basename(filePath))
   });
-  response.end();
+  response.end(fileContents);
 };
 
 var serveStatic = function(response, cache, absPath) {
-  if (cache[absPath]) {
+  if (false && cache[absPath]) {
     sendFile(response, absPath, cache[absPath]);
   } else {
     fs.exists(absPath, function(exists) {
@@ -41,17 +41,17 @@ var serveStatic = function(response, cache, absPath) {
   }
 };
 
-var server = http.createServer(function(request, response){
+var server = http.createServer(function(request, response) {
   var filePath = false;
-  if(request.url === '/'){
+  if (request.url === '/') {
     filePath = 'public/index.html';
-  }else{
+  } else {
     filePath = 'public' + request.url;
   }
   var absPath = './' + filePath;
   serveStatic(response, cache, absPath);
 });
 
-server.listen(3000, function(){
+server.listen(3000, function() {
   console.log('Server listening on port 3000.');
 });
